@@ -1,4 +1,4 @@
-param($pixi_python_env = "py311")
+param( $pixi_python_env = "py311" )
 Set-Location $PSScriptRoot
 Set-Location ..
 
