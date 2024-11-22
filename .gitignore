@@ -1,0 +1,5 @@
+.VSCodeCounter
+pytorch
+# pixi environments
+.pixi
+*.egg-info
