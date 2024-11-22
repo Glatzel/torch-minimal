@@ -1,4 +1,9 @@
-param( $pixi_python_env = "py311" )
+param( $pixi_python_env = "py311",$version = "" )
+if($version -eq '')
+{
+    $version=gh release view -R pytorch/pytorch --json tagName -q .tagName
+}
+Write-Host $version
 Set-Location $PSScriptRoot
 Set-Location ..
 
@@ -14,6 +19,5 @@ $env:USE_QNNPACK=0
 $env:USE_TENSORPIPE=0
 
 Set-Location pytorch
-Remove-Item */CMakeCache.txt -ErrorAction SilentlyContinue
-pixi run -e "$pixi_python_env" python setup.py install
+pixi run -e "$pixi_python_env" python setup.py develop
 

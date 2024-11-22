@@ -2,5 +2,8 @@
     "git.repositoryScanIgnoredFolders": [
         "node_modules",
         "pytorch"
+    ],
+    "python.analysis.exclude": [
+        "pytorch"
     ]
 }
