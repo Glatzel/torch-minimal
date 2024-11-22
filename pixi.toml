@@ -9,6 +9,7 @@ version = "0.1.0"
 [tasks]
 
 [feature.torch.dependencies]
+nomkl = "*"
 astunparse="*"
 cmake="*"
 expecttest=">=0.2.1"
@@ -17,8 +18,6 @@ fsspec="*"
 hypothesis="*"
 jinja2="*"
 libuv="*"
-mkl-include="*"
-mkl-static="*"
 networkx="*"
 ninja="*"
 numpy="*"

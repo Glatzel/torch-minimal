@@ -6,17 +6,17 @@ permissions:
 
 on:
   workflow_dispatch:
-#   schedule:
-#     - cron: "0 0 * * *"
-#   push:
-#     branches: main
-#     paths-ignore:
-#       - "*.md"
-#       - ".pre-commit-config.yaml"
-#   pull_request:
-#     paths-ignore:
-#       - "*.md"
-#       - ".pre-commit-config.yaml"
+  schedule:
+    - cron: "0 0 * * *"
+  push:
+    branches: main
+    paths-ignore:
+      - "*.md"
+      - ".pre-commit-config.yaml"
+  pull_request:
+    paths-ignore:
+      - "*.md"
+      - ".pre-commit-config.yaml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
@@ -96,15 +96,15 @@ jobs:
         run: ./scripts/clone-torch.ps1 "${{needs.version-check.outputs.version}}"
 
       - name: build torch
-        run: ./scripts/build-torch.ps1
+        run: ./scripts/build-torch.ps1 "${{needs.version-check.outputs.version}}"
 
       - name: test torch
-        run: pixi run -e ${{needs.version-check.outputs.version}} python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+        run: pixi run -e "$pixi_python_env" python -c "import torch; print(torch.__version__); print(torch.__config__.show());print(torch.__file__)"
 
       - name: Create Release
         if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
         uses: softprops/action-gh-release@v2
         with:
           body_path: build_info.md
-          files: pytorch/dist/*.wheel
+          files: pytorch/dist/*.whl
           tag_name: ${{needs.version-check.outputs.version}}
