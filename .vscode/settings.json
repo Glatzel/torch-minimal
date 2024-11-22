@@ -1,10 +1,11 @@
 {
     "git.repositoryScanIgnoredFolders": [
         "node_modules",
-        "pytorch"
+        "pytorch",
+        ".pixi"
     ],
     "python.analysis.exclude": [
-        "**/pytorch",
-        "**/.pixi"
+        "**/pytorch/**",
+        "**/.pixi/**"
     ]
 }
