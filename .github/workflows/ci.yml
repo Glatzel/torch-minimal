@@ -77,7 +77,7 @@ jobs:
         run: ./scripts/clone-torch.ps1 "${{needs.version-check.outputs.version}}"
 
       - name: build torch
-        run: ./scripts/build-torch.ps1 "${{needs.version-check.outputs.version}}"
+        run: ./scripts/build-torch.ps1 "${{matrix.pixi_python_env}}" "${{needs.version-check.outputs.version}}"
 
       - name: test torch
         run: pixi run -e "$pixi_python_env" python -c "import torch; print(torch.__version__); print(torch.__config__.show());print(torch.__file__)"
