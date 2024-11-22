@@ -1,4 +1,3 @@
-
 name: CI
 
 permissions:
@@ -54,17 +53,6 @@ jobs:
             write-output "New version found, ${{steps.get-version.outputs.version}}"
           }
 
-  cache-pixi:
-    needs: version-check
-    if: ${{needs.version-check.outputs.need_build =='true'}}
-    strategy:
-      matrix:
-        pixi_env: [py311]
-    uses: Glatzel/template/.github/workflows/cache-pixi.yml@main
-    with:
-      machine: windows-latest
-      pixi_env: ${{matrix.pixi_env}}
-
   build-release:
     # run this job when new version is found or push or pull_request
     # only create release on schedule or workflow_dispatch
@@ -80,13 +68,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      - uses: actions/cache/restore@v4
-        with:
-          path: .pixi
-          key: pixi-${{matrix.pixi_python_env}}-${{ runner.os }}-${{ hashFiles('**/pixi.lock') }}
-          restore-keys: |
-            pixi-${{matrix.pixi_python_env}}-${{ runner.os }}
-
       - name: Set up pixi
         uses: prefix-dev/setup-pixi@v0.8.1
         with:
@@ -100,7 +81,13 @@ jobs:
 
       - name: test torch
         run: pixi run -e "$pixi_python_env" python -c "import torch; print(torch.__version__); print(torch.__config__.show());print(torch.__file__)"
-
+    
+      - uses: actions/upload-artifact@v4
+        with:
+          name: torch-${{needs.version-check.outputs.version}}-${{matrix.pixi_python_env}}
+          path: pytorch/dist/*.whl
+          if-no-files-found: error
+        
       - name: Create Release
         if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
         uses: softprops/action-gh-release@v2
