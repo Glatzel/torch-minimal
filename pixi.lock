@@ -33,28 +33,31 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/intel-openmp-2025.0.0-h57928b3_1164.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/jinja2-3.1.4-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/krb5-1.21.3-hdf4eb48_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/libblas-3.9.0-8_mkl.tar.bz2
-      - conda: https://conda.anaconda.org/conda-forge/win-64/libcblas-3.9.0-8_mkl.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/win-64/libblas-3.9.0-25_win64_openblas.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/libcblas-3.9.0-25_win64_openblas.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libcurl-8.10.1-h1ee3ff0_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libexpat-2.6.4-he0c23c2_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libffi-3.4.2-h8ffe710_5.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/win-64/libflang-5.0.0-h6538335_20180525.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/win-64/libhwloc-2.11.2-default_ha69328c_1001.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libiconv-1.17-hcfcfb64_2.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/liblapack-3.9.0-8_mkl.tar.bz2
+      - conda: https://conda.anaconda.org/conda-forge/win-64/liblapack-3.9.0-25_win64_openblas.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/libopenblas-0.3.28-pthreads_hf0a32cb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.47.0-h2466b09_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libssh2-1.11.0-h7dfc565_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libuv-1.49.2-h2466b09_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libwinpthread-12.0.0.r4.gg4f2fc60ca-h57928b3_8.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libxml2-2.13.5-h442d1da_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/libzlib-1.3.1-h2466b09_2.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/llvm-meta-5.0.0-0.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/win-64/markupsafe-3.0.2-py311h5082efb_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/mkl-2020.4-hb70f87d_311.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/win-64/mkl-include-2025.0.0-hbcdf7a0_930.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/mkl-static-2025.0.0-hbcdf7a0_930.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/mpmath-1.3.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/networkx-3.4.2-pyh267e887_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/ninja-1.12.1-hc790b64_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/numpy-2.1.3-py311h35ffc71_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/win-64/openmp-5.0.0-vc14_1.tar.bz2
       - conda: https://conda.anaconda.org/conda-forge/win-64/openssl-3.4.0-h2466b09_0.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/optree-0.13.1-py311h3257749_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/packaging-24.2-pyhff2d567_1.conda
@@ -477,42 +480,46 @@ packages:
 - kind: conda
   name: libblas
   version: 3.9.0
-  build: 8_mkl
-  build_number: 8
+  build: 25_win64_openblas
+  build_number: 25
   subdir: win-64
-  url: https://conda.anaconda.org/conda-forge/win-64/libblas-3.9.0-8_mkl.tar.bz2
-  sha256: 03abee1e77d7eec602f8599bf0d5045f47d0000a3ce36bbb13ca64faac1c45e1
-  md5: 6de24bc80d8a3dcd5e2f06641a5d1da3
+  url: https://conda.anaconda.org/conda-forge/win-64/libblas-3.9.0-25_win64_openblas.conda
+  sha256: 2105d8084c67f575143284c351c21235d369767a06d5133555373fa6c10dc3b0
+  md5: 972ba814d59ce8c06a6be4664de45fa1
   depends:
-  - mkl 2020.4 hb70f87d_311
+  - libopenblas 0.3.28 pthreads_hf0a32cb_0
   constrains:
-  - liblapacke 3.9.0 8_mkl
-  - blas * mkl
-  - liblapack 3.9.0 8_mkl
-  - libcblas 3.9.0 8_mkl
+  - liblapack 3.9.0 25_win64_openblas
+  - blas * openblas
+  - liblapacke 3.9.0 25_win64_openblas
+  - libcblas 3.9.0 25_win64_openblas
+  track_features:
+  - blas_openblas
   license: BSD-3-Clause
   license_family: BSD
-  size: 4071895
-  timestamp: 1612394585198
+  size: 3973491
+  timestamp: 1729643650915
 - kind: conda
   name: libcblas
   version: 3.9.0
-  build: 8_mkl
-  build_number: 8
+  build: 25_win64_openblas
+  build_number: 25
   subdir: win-64
-  url: https://conda.anaconda.org/conda-forge/win-64/libcblas-3.9.0-8_mkl.tar.bz2
-  sha256: badcc00849870297861a70c65484a0697ef9f1cdbe8d42cd363004ccdbd8923a
-  md5: 3bac56af014b2ef22ebd87d4f5ee2774
+  url: https://conda.anaconda.org/conda-forge/win-64/libcblas-3.9.0-25_win64_openblas.conda
+  sha256: c5b4d41c34a28e577511a909cd05b776cc1bac49c1418d57e448f9f586de4c41
+  md5: ee5350a8985a792cefa39199d3a9872a
   depends:
-  - libblas 3.9.0 8_mkl
+  - libblas 3.9.0 25_win64_openblas
   constrains:
-  - liblapacke 3.9.0 8_mkl
-  - blas * mkl
-  - liblapack 3.9.0 8_mkl
+  - liblapack 3.9.0 25_win64_openblas
+  - blas * openblas
+  - liblapacke 3.9.0 25_win64_openblas
+  track_features:
+  - blas_openblas
   license: BSD-3-Clause
   license_family: BSD
-  size: 4071811
-  timestamp: 1612394617920
+  size: 3970863
+  timestamp: 1729643685394
 - kind: conda
   name: libcurl
   version: 8.10.1
@@ -567,6 +574,25 @@ packages:
   size: 42063
   timestamp: 1636489106777
 - kind: conda
+  name: libflang
+  version: 5.0.0
+  build: h6538335_20180525
+  build_number: 20180525
+  subdir: win-64
+  url: https://conda.anaconda.org/conda-forge/win-64/libflang-5.0.0-h6538335_20180525.tar.bz2
+  sha256: 0b893b511190332320f4a3e3d6424fbd350271ffbca34eb25b5cd8bc451f1a05
+  md5: 9f473a344e18668e99a93f7e21a54b69
+  depends:
+  - openmp 5.0.0
+  - vc >=14,<15.0a0
+  arch: x86_64
+  platform: win
+  track_features:
+  - flang
+  license: Apache 2.0
+  size: 531143
+  timestamp: 1527899216421
+- kind: conda
   name: libhwloc
   version: 2.11.2
   build: default_ha69328c_1001
@@ -604,22 +630,43 @@ packages:
 - kind: conda
   name: liblapack
   version: 3.9.0
-  build: 8_mkl
-  build_number: 8
+  build: 25_win64_openblas
+  build_number: 25
   subdir: win-64
-  url: https://conda.anaconda.org/conda-forge/win-64/liblapack-3.9.0-8_mkl.tar.bz2
-  sha256: 9f542a821bc777aaf99948ef731aedd6d900c1085038db842237fda2a6f516d2
-  md5: f3c618bd796a71eede50ffe29d25ad8c
+  url: https://conda.anaconda.org/conda-forge/win-64/liblapack-3.9.0-25_win64_openblas.conda
+  sha256: 3dd2e57fb0da4218deabee14caa5886d4bef08eaf3af273b15c77a82a62ddb4b
+  md5: 6a036cd00efd51283831536792c56f58
   depends:
-  - libblas 3.9.0 8_mkl
+  - libblas 3.9.0 25_win64_openblas
   constrains:
-  - liblapacke 3.9.0 8_mkl
-  - blas * mkl
-  - libcblas 3.9.0 8_mkl
+  - blas * openblas
+  - liblapacke 3.9.0 25_win64_openblas
+  - libcblas 3.9.0 25_win64_openblas
+  track_features:
+  - blas_openblas
   license: BSD-3-Clause
   license_family: BSD
-  size: 4072390
-  timestamp: 1612394650961
+  size: 3973640
+  timestamp: 1729643717290
+- kind: conda
+  name: libopenblas
+  version: 0.3.28
+  build: pthreads_hf0a32cb_0
+  subdir: win-64
+  url: https://conda.anaconda.org/conda-forge/win-64/libopenblas-0.3.28-pthreads_hf0a32cb_0.conda
+  sha256: 4574b0f99afb72e248df016443ac5ee4b2b59c22fe73c3cf63540ddda28885bd
+  md5: 3a27ab073561e48706ba93ffe1552697
+  depends:
+  - libflang >=5.0.0,<6.0.0.a0
+  - ucrt >=10.0.20348.0
+  - vc >=14.2,<15
+  - vc14_runtime >=14.29.30139
+  constrains:
+  - openblas >=0.3.28,<0.3.29.0a0
+  license: BSD-3-Clause
+  license_family: BSD
+  size: 3975623
+  timestamp: 1723935076109
 - kind: conda
   name: libsqlite
   version: 3.47.0
@@ -725,6 +772,18 @@ packages:
   size: 55476
   timestamp: 1727963768015
 - kind: conda
+  name: llvm-meta
+  version: 5.0.0
+  build: '0'
+  subdir: noarch
+  noarch: generic
+  url: https://conda.anaconda.org/conda-forge/noarch/llvm-meta-5.0.0-0.tar.bz2
+  sha256: 090bbeacc3297ff579b53f55ad184f05c30e316fe9d5d7df63df1d2ad4578b79
+  md5: 213b5b5ad34008147a824460e50a691c
+  license: BSD-3-Clause
+  license_family: BSD
+  size: 2667
+- kind: conda
   name: markupsafe
   version: 3.0.2
   build: py311h5082efb_0
@@ -744,21 +803,6 @@ packages:
   license_family: BSD
   size: 28244
   timestamp: 1729351760960
-- kind: conda
-  name: mkl
-  version: '2020.4'
-  build: hb70f87d_311
-  build_number: 311
-  subdir: win-64
-  url: https://conda.anaconda.org/conda-forge/win-64/mkl-2020.4-hb70f87d_311.tar.bz2
-  sha256: bed03b2e83817226314993e135213ae903c40b4423113509538106414ae1de64
-  md5: eb823c8b41ecf9cd5f08baea1b32e4ef
-  depends:
-  - intel-openmp
-  license: LicenseRef-ProprietaryIntel
-  license_family: Proprietary
-  size: 180784978
-  timestamp: 1605064106223
 - kind: conda
   name: mkl-include
   version: 2025.0.0
@@ -865,6 +909,22 @@ packages:
   license_family: BSD
   size: 7659216
   timestamp: 1730588918527
+- kind: conda
+  name: openmp
+  version: 5.0.0
+  build: vc14_1
+  build_number: 1
+  subdir: win-64
+  url: https://conda.anaconda.org/conda-forge/win-64/openmp-5.0.0-vc14_1.tar.bz2
+  sha256: 05c19170938b589f59049679d4e0679c98160fecc6fd1bf721b0f4980bd235dd
+  md5: 8284c925330fa53668ade00db3c9e787
+  depends:
+  - llvm-meta 5.0.0|5.0.0.*
+  - vc 14.*
+  arch: x86_64
+  platform: win
+  license: NCSA
+  size: 590466
 - kind: conda
   name: openssl
   version: 3.4.0
