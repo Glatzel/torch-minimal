@@ -88,10 +88,10 @@ jobs:
           path: pytorch/dist/*.whl
           if-no-files-found: error
         
-      - name: Create Release
-        if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
-        uses: softprops/action-gh-release@v2
-        with:
-          body_path: build_info.md
-          files: pytorch/dist/*.whl
-          tag_name: ${{needs.version-check.outputs.version}}
+      # - name: Create Release
+      #   if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     body_path: build_info.md
+      #     files: pytorch/dist/*.whl
+      #     tag_name: ${{needs.version-check.outputs.version}}
