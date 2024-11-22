@@ -12,15 +12,15 @@ $env:USE_CUDNN = "OFF"
 $env:USE_DISTRIBUTED = "OFF"
 $env:USE_FBGEMM = "OFF"
 $env:USE_GLOO = "OFF"
-$env:USE_KINETO="OFF
+$env:USE_KINETO = "OFF"
 $env:USE_MKLDNN = "OFF"
 $env:USE_NCCL = "OFF"
 $env:USE_OPENMP = "ON"
-$env:USE_TENSORPIPE="OFF"
+$env:USE_TENSORPIPE = "OFF"
 $env:USE_XNNPACK = "OFF"
-"
+
 Set-Location pytorch
 "$version" -replace "v","" > version.txt
-pixi run -e "$pixi_python_env" python setup.py clean
+# pixi run -e "$pixi_python_env" python setup.py clean
 pixi run -e "$pixi_python_env" python setup.py install
 pixi run -e "$pixi_python_env" python setup.py bdist_wheel
