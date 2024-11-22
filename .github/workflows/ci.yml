@@ -98,19 +98,16 @@ jobs:
       - name: build torch
         run: ./scripts/build-torch.ps1
 
-      - name: copy item
-        run: ./scripts/copy-item.ps1
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: openimageio-windows-${{needs.version-check.outputs.version}}
-          path: openimageio-windows-${{needs.version-check.outputs.version}}.zip
-          if-no-files-found: error
+      - name: test torch
+        run: pixi run -e ${{needs.version-check.outputs.version}} python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+      
+      - name: build torch wheel
+        run: pixi run -e ${{needs.version-check.outputs.version}} python setup.py bdist_wheel
 
       - name: Create Release
         if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
         uses: softprops/action-gh-release@v2
         with:
           body_path: build_info.md
-          files: openimageio-windows-${{needs.version-check.outputs.version}}.zip
+          files: pytorch/dist/*.wheel
           tag_name: ${{needs.version-check.outputs.version}}

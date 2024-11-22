@@ -4,6 +4,6 @@
         "pytorch"
     ],
     "python.analysis.exclude": [
-        "pytorch"
+        "**/pytorch"
     ]
 }
