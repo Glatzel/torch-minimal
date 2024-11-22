@@ -81,13 +81,13 @@ jobs:
 
       - name: test torch
         run: pixi run -e "$pixi_python_env" python -c "import torch; print(torch.__version__); print(torch.__config__.show());print(torch.__file__)"
-    
+
       - uses: actions/upload-artifact@v4
         with:
           name: torch-${{needs.version-check.outputs.version}}-${{matrix.pixi_python_env}}
           path: pytorch/dist/*.whl
           if-no-files-found: error
-        
+
       # - name: Create Release
       #   if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
       #   uses: softprops/action-gh-release@v2
