@@ -101,9 +101,6 @@ jobs:
       - name: test torch
         run: pixi run -e ${{needs.version-check.outputs.version}} python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
 
-      - name: build torch wheel
-        run: pixi run -e ${{needs.version-check.outputs.version}} python setup.py bdist_wheel
-
       - name: Create Release
         if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
         uses: softprops/action-gh-release@v2
