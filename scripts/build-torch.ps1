@@ -20,6 +20,5 @@ $env:USE_TENSORPIPE=0
 
 Set-Location pytorch
 $version > version.txt
-Remove-Item */CMakeCache.txt -ErrorAction SilentlyContinue
-pixi run -e "$pixi_python_env" python setup.py develop
+pixi run -e "$pixi_python_env" python setup.py install
 
