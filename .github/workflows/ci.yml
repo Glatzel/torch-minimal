@@ -27,7 +27,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     outputs:
-      version: ${{steps.get-version.outputs.version}}
+      version: ${{ steps.get-version.outputs.version}}
       need_build: ${{steps.check-new-version.outputs.need_build}}
     steps:
       - name: get-version
