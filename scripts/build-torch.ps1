@@ -21,7 +21,13 @@ $env:USE_XNNPACK = "OFF"
 
 Set-Location pytorch
 "$version" -replace "v","" > version.txt
+Write-Output "::group::clean"
 pixi clean
 pixi run -e "$pixi_python_env" python setup.py clean
+Write-Output "::endgroup::"
+Write-Output "::group::install"
 pixi run -e "$pixi_python_env" python setup.py install
+Write-Output "::endgroup::"
+Write-Output "::group::build wheel"
 pixi run -e "$pixi_python_env" python setup.py bdist_wheel
+Write-Output "::endgroup::"

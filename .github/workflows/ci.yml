@@ -80,7 +80,7 @@ jobs:
         run: ./scripts/build-torch.ps1 "${{matrix.pixi_python_env}}" "${{needs.version-check.outputs.version}}"
 
       - name: test torch
-        run: pixi run -e "$pixi_python_env" python -c "import torch; print(torch.__version__); print(torch.__config__.show());print(torch.__file__)"
+        run: pixi run -e ${{matrix.pixi_python_env}} python -c "import torch; print(torch.__version__); print(torch.__config__.show());print(torch.__file__)"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -88,10 +88,9 @@ jobs:
           path: pytorch/dist/*.whl
           if-no-files-found: error
 
-      # - name: Create Release
-      #   if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     body_path: build_info.md
-      #     files: pytorch/dist/*.whl
-      #     tag_name: ${{needs.version-check.outputs.version}}
+      - name: Create Release
+        if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: pytorch/dist/*.whl
+          tag_name: ${{needs.version-check.outputs.version}}
