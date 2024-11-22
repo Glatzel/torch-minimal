@@ -1,0 +1,116 @@
+
+name: CI
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+#   schedule:
+#     - cron: "0 0 * * *"
+#   push:
+#     branches: main
+#     paths-ignore:
+#       - "*.md"
+#       - ".pre-commit-config.yaml"
+#   pull_request:
+#     paths-ignore:
+#       - "*.md"
+#       - ".pre-commit-config.yaml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  version-check:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    outputs:
+      version: ${{steps.get-version.outputs.version}}
+      need_build: ${{steps.check-new-version.outputs.need_build}}
+    steps:
+      - name: get-version
+        id: get-version
+        run: |
+          $version=gh release view -R pytorch/pytorch --json tagName -q .tagName
+          Write-Output "pytorch: $version"
+          echo "version=$version" >> "$env:GITHUB_OUTPUT"
+
+      - name: check-new-version
+        id: check-new-version
+        run: |
+          $current_versions=gh release list -R Glatzel/torch-minimal --json tagName
+
+          write-output $current_versions
+
+          if("$current_versions".Contains("${{ steps.get-version.outputs.version }}")){
+            echo "need_build=false" >> "$env:GITHUB_OUTPUT"
+            write-output "No new version found, skip build."
+          }
+          else{
+            echo "need_build=true" >> "$env:GITHUB_OUTPUT"
+            write-output "New version found, ${{steps.get-version.outputs.version}}"
+          }
+
+  cache-pixi:
+    needs: version-check
+    if: ${{needs.version-check.outputs.need_build =='true'}}
+    strategy:
+      matrix:
+        pixi_env: [py311]
+    uses: Glatzel/template/.github/workflows/cache-pixi.yml@main
+    with:
+      machine: windows-latest
+      pixi_env: ${{matrix.pixi_env}}
+
+  build-release:
+    # run this job when new version is found or push or pull_request
+    # only create release on schedule or workflow_dispatch
+    needs: version-check
+    if: ${{needs.version-check.outputs.need_build =='true'|| github.event_name!='schedule'}}
+    runs-on: windows-latest
+    strategy:
+        matrix:
+            pixi_python_env: [py311]
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/cache/restore@v4
+        with:
+          path: .pixi
+          key: pixi-${{matrix.pixi_python_env}}-${{ runner.os }}-${{ hashFiles('**/pixi.lock') }}
+          restore-keys: |
+            pixi-${{matrix.pixi_python_env}}-${{ runner.os }}
+
+      - name: Set up pixi
+        uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          run-install: false
+
+      - name: clone torch
+        run: ./scripts/clone-torch.ps1 "${{needs.version-check.outputs.version}}"
+
+      - name: build torch
+        run: ./scripts/build-torch.ps1
+
+      - name: copy item
+        run: ./scripts/copy-item.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openimageio-windows-${{needs.version-check.outputs.version}}
+          path: openimageio-windows-${{needs.version-check.outputs.version}}.zip
+          if-no-files-found: error
+
+      - name: Create Release
+        if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: build_info.md
+          files: openimageio-windows-${{needs.version-check.outputs.version}}.zip
+          tag_name: ${{needs.version-check.outputs.version}}

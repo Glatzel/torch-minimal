@@ -1,3 +1,4 @@
+param($pixi_python_env = "py311")
 Set-Location $PSScriptRoot
 Set-Location ..
 
@@ -13,5 +14,7 @@ $env:USE_QNNPACK=0
 $env:USE_TENSORPIPE=0
 
 Set-Location pytorch
-pixi run python setup.py install
-pixi run python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+Remove-Item */CMakeCache.txt -ErrorAction SilentlyContinue
+pixi run -e "$pixi_python_env" python setup.py install
+pixi run -e "$pixi_python_env" python -c "import torch; print(torch.__version__); print(torch.cuda.is_available())"
+pixi run -e "$pixi_python_env" python setup.py bdist_wheel

@@ -32,9 +32,10 @@ setuptools="<=72.1.0"
 sympy="==1.13.1"
 types-dataclasses="*"
 typing-extensions=">=4.10.0"
+wheel="*"
 
 [feature.py311.dependencies]
 python="3.11.*"
 
 [environments]
-default=["py311","torch"]
+py311=["py311","torch"]

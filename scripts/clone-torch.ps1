@@ -1,10 +1,14 @@
+param($version = "")
+if($version -eq '')
+{
+    $version=gh release view -R pytorch/pytorch --json tagName -q .tagName
+}
 Set-Location $PSScriptRoot
 Set-Location ..
 
 Remove-Item pytorch -Force -Recurse -ErrorAction SilentlyContinue
 New-Item pytorch -ItemType Directory
 
-$version = gh release view -R pytorch/pytorch --json tagName -q .tagName
 Write-Output "::group::clone torch"
 git clone https://github.com/pytorch/pytorch.git
 Set-Location pytorch
