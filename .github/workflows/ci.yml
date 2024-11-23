@@ -87,7 +87,7 @@ jobs:
 
       - name: remove dnnl
         run: Remove-Item ./temp/torch/lib/dnnl.lib
-      
+
       - name: pack whl
         run: |
           $whl = Get-ChildItem -Path ./download | Select-Object -First 1
