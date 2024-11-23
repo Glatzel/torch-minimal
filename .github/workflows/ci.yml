@@ -61,7 +61,7 @@ jobs:
     runs-on: windows-latest
     strategy:
         matrix:
-            pixi_python_env: [py311]
+            python_version: ["3.9","3.10","3.11","3.12","3.13"]
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -73,24 +73,31 @@ jobs:
         with:
           run-install: false
 
-      - name: clone torch
-        run: ./scripts/clone-torch.ps1 "${{needs.version-check.outputs.version}}"
+      - name: download whl
+        run: |
+          pixi run pip download torch==$torch_version `
+              --platform win_amd64 `
+              --python-version ${{matrix.python_version}} `
+              --only-binary=:all: `
+              -d ./download `
+              --no-deps
 
-      - name: build torch
-        run: ./scripts/build-torch.ps1 "${{matrix.pixi_python_env}}" "${{needs.version-check.outputs.version}}"
+      - name: expand whl
+        run: Expand-Archive -Path ./download/*.whl -DestinationPath ./temp
 
-      - name: test torch
-        run: pixi run -e ${{matrix.pixi_python_env}} python -c "import torch; print(torch.__version__); print(torch.__config__.show());print(torch.__file__)"
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: torch-${{needs.version-check.outputs.version}}-${{matrix.pixi_python_env}}
-          path: pytorch/dist/*.whl
-          if-no-files-found: error
+      - name: remove dnnl
+        run: Remove-Item ./temp/torch/lib/dnnl.lib
+      
+      - name: pack whl
+        run: |
+          $whl = Get-ChildItem -Path ./download | Select-Object -First 1
+          $whl=$whl.Name
+          New-Item ./dist -ItemType Directory
+          Compress-Archive -Path ./temp/* -DestinationPath "./dist/$whl" -PassThru
 
       - name: Create Release
         if: ${{ github.event_name=='workflow_dispatch'||github.event_name=='schedule' }}
         uses: softprops/action-gh-release@v2
         with:
-          files: pytorch/dist/*.whl
+          files: dist/*.whl
           tag_name: ${{needs.version-check.outputs.version}}

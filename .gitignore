@@ -1,5 +1,6 @@
-.VSCodeCounter
-pytorch
+dist
+download
+temp
 # pixi environments
 .pixi
 *.egg-info
