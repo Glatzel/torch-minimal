@@ -60,8 +60,9 @@ jobs:
     if: ${{needs.version-check.outputs.need_build =='true'|| github.event_name!='schedule'}}
     runs-on: windows-latest
     strategy:
-        matrix:
-            python_version: ["3.9","3.10","3.11","3.12","3.13"]
+      fail-fast: false
+      matrix:
+          python_version: ["3.9","3.10","3.11","3.12","3.13"]
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -75,6 +76,7 @@ jobs:
 
       - name: download whl
         run: |
+          $torch_version="${{needs.version-check.outputs.version}}" -replace "v",""
           pixi run pip download torch==$torch_version `
               --platform win_amd64 `
               --python-version ${{matrix.python_version}} `
