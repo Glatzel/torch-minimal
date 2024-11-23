@@ -8,34 +8,6 @@ version = "0.1.0"
 
 [tasks]
 
-[feature.torch.dependencies]
-astunparse="*"
-cmake="*"
-expecttest=">=0.2.1"
-filelock="*"
-fsspec="*"
-hypothesis="*"
-jinja2="*"
-libuv="*"
-mkl-include="*"
-mkl-static="*"
-networkx="*"
-ninja="*"
-numpy="*"
-optree=">=0.13.0"
-packaging="*"
-psutil="*"
-pyyaml="*"
-requests="*"
-rust="*"
-setuptools="<=72.1.0"
-sympy="==1.13.1"
-types-dataclasses="*"
-typing-extensions=">=4.10.0"
-wheel="*"
-
-[feature.py311.dependencies]
-python="3.11.*"
-
-[environments]
-py311=["py311","torch"]
+[dependencies]
+python = "*"
+pip = "*"
